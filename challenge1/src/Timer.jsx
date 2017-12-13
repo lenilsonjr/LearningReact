@@ -6,41 +6,45 @@ class Timer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      days: 0,
-      hours: 0,
-      minutes: 0,
-      seconds: 0
+      currentDeadline: 0,
+      remainingSeconds: 0
     }
   }
 
   componentWillMount() {
-    this.getTimeUntil(this.props.deadline);
+    this.setState({currentDeadline: parseInt(this.props.deadline)});    
+    this.getTimeUntil(parseInt(this.props.deadline));
   }
 
   componentDidMount() {
-    setInterval(() => this.getTimeUntil(this.props.deadline), 1000);
-  }
-
-  leading0(num) {
-    return num < 10 ? '0' + num : num;
+    setInterval(() => this.getTimeUntil(this.props.deadline), 1000);      
   }
 
   getTimeUntil(deadline) {
-    const time = Date.parse(deadline) - Date.parse(new Date());
-    const seconds = Math.floor((time/1000) % 60);
-    const minutes = Math.floor((time/1000/60) % 60);
-    const hours = Math.floor(time/(1000*60*60) % 24);
-    const days = Math.floor(time/(1000*60*60*24));
-    this.setState({days, hours, minutes, seconds});
+
+    if ( this.state.currentDeadline != deadline ) {
+      this.setState({currentDeadline: deadline});    
+      this.setState({remainingSeconds: 0});      
+    }
+
+    if (deadline != 0) {
+
+      const count = this.state.remainingSeconds == 0 ? deadline - 1 : this.state.remainingSeconds - 1;
+      this.setState({remainingSeconds: count});
+  
+      if (count <= 0 && deadline !== 0) {
+        alert('BEEEP BEEP!');
+        this.setState({remainingSeconds: 0});
+      }  
+
+    }
+
   }
 
   render() {
     return(
       <div>
-        <div className="clock-days">{this.leading0(this.state.days)} days</div>
-        <div className="clock-hours">{this.leading0(this.state.hours)} hours</div>
-        <div className="clock-minutes">{this.leading0(this.state.minutes)} minutes</div>
-        <div className="clock-seconds">{this.leading0(this.state.seconds)} seconds</div>
+        <div className="clock-remainingSeconds">{this.state.remainingSeconds} seconds</div>
       </div>
     )
   }
