@@ -11,3 +11,15 @@ countdownchamp/.env.production.local
 countdownchamp/npm-debug.log*
 countdownchamp/yarn-debug.log*
 countdownchamp/yarn-error.log*
+
+challenge1/node_modules
+challenge1/coverage
+challenge1/build
+challenge1/.DS_Store
+challenge1/.env.local
+challenge1/.env.development.local
+challenge1/.env.test.local
+challenge1/.env.production.local
+challenge1/npm-debug.log*
+challenge1/yarn-debug.log*
+challenge1/yarn-error.log*
