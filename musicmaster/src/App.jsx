@@ -4,6 +4,17 @@ import './App.css';
 
 class App extends Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      query: ''
+    }
+  }
+
+  search() {
+    console.log('this.state', this.state);
+  }
+
   render(){
     return(
       <div className="app">
@@ -13,8 +24,15 @@ class App extends Component {
             <FormControl
               type="text"
               placeholder="search for an artist"
+              query={this.state.query}
+              onChange={event => { this.setState({ query: event.target.value }) }}
+              onKeyPress={event => {
+                if (event.key === 'Enter') {
+                  this.search()
+                }
+              }}
             />
-            <InputGroup.Addon>
+            <InputGroup.Addon onClick={() => this.search()}>
               <Glyphicon glyph="search" />
             </InputGroup.Addon>
           </InputGroup>
