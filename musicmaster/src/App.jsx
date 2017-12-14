@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import { FormGroup, FormControl, InputGroup, Glyphicon } from 'react-bootstrap';
 import './App.css';
+import Profile from './Profile';
 
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      query: ''
+      query: '',
+      artist: null
     }
   }
 
@@ -24,9 +26,11 @@ class App extends Component {
       }
     })
     .then(response => response.json())
-    .then(json => console.log('json', json));
-
-    console.log('FETCH_URL', FETCH_URL);
+    .then(json => {
+      const artist = json.artists.items[0];
+      console.log('artist', artist);
+      this.setState({artist});
+    });
   }
 
   render(){
@@ -51,13 +55,19 @@ class App extends Component {
             </InputGroup.Addon>
           </InputGroup>
         </FormGroup>
-        <div className="profile">
-          <div>Artist Picture</div>
-          <div>Artist Name</div>
-        </div>
-        <div className="gallery">
-          Gallery
-        </div>
+        {
+          this.state.artist !== null
+          ?
+            <div>
+              <Profile
+                artist={this.state.artist}
+              />
+              <div className="gallery">
+                Gallery
+              </div>
+            </div>
+          : <div></div>
+        }
       </div>
     )
   }
