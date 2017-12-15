@@ -11,12 +11,45 @@ class App extends Component {
     this.state = {
       query: '',
       artist: null,
-      tracks: []
+      tracks: [],
+      token: '',
+      featured_artist: '',
+      featured_artist_id: 0      
     }
   }
 
+  getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;  
+  }
+
+  componentDidMount() {
+    this.trending()
+  }
+
+  trending() {
+    let accessToken = this.state.token;
+
+    const RELEASES_URL = 'https://api.spotify.com/v1/browse/new-releases';
+
+    fetch(RELEASES_URL, {
+      method: 'GET',
+      headers:  {
+        'Authorization': 'Bearer ' + accessToken
+      }
+    })
+    .then(response => response.json())
+    .then(json => {
+      const items = json.albums.items;
+      setInterval(() => this.setState({ featured_artist_id: this.getRandomInt(0, items.length) }), 3000);      
+      setInterval(() => this.setState({ featured_artist: items[this.state.featured_artist_id].artists[0].name }), 3000);
+    });
+
+  }
+
   search() {
-    let accessToken = '';
+    let accessToken = this.state.token;
 
     const BASE_URL = 'https://api.spotify.com/v1/search?';
     let FETCH_URL = `${BASE_URL}q=${this.state.query}&type=artist&limit=1`;
@@ -31,7 +64,6 @@ class App extends Component {
     .then(response => response.json())
     .then(json => {
       const artist = json.artists.items[0];
-      console.log('artist', artist);
       this.setState({artist});
 
       FETCH_URL = `${ALBUM_URL}/${artist.id}/top-tracks?country=BR&`;
@@ -58,7 +90,7 @@ class App extends Component {
           <InputGroup>
             <FormControl
               type="text"
-              placeholder="search for an artist"
+              placeholder={ this.state.featured_artist == '' ? 'search for an artist' : `try searching for ${this.state.featured_artist}` }
               query={this.state.query}
               onChange={event => { this.setState({ query: event.target.value }) }}
               onKeyPress={event => {
