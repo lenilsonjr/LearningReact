@@ -47,3 +47,15 @@ reminderpro/.env.production.local
 reminderpro/npm-debug.log*
 reminderpro/yarn-debug.log*
 reminderpro/yarn-error.log*
+
+goalcoach/node_modules
+goalcoach/coverage
+goalcoach/build
+goalcoach/.DS_Store
+goalcoach/.env.local
+goalcoach/.env.development.local
+goalcoach/.env.test.local
+goalcoach/.env.production.local
+goalcoach/npm-debug.log*
+goalcoach/yarn-debug.log*
+goalcoach/yarn-error.log*
